@@ -1,0 +1,3 @@
+name := "spark-test"
+
+version := "0.0.x"
