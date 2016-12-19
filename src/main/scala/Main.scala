@@ -15,12 +15,10 @@ object Main {
 
     val csvRdd = sc.textFile(getFilePath())
     val filteredRdd = csvRdd.filter(_.contains("XSHG"))
+    // equals to persist()
     filteredRdd.cache()
 
-    val wordCount1 = getWordCount(filteredRdd)
-    getWordCountInBook(filteredRdd)
-
-    println(s"My count $wordCount1")
+    WordCount.count(filteredRdd)
 
     sc.stop()
 
@@ -36,15 +34,5 @@ object Main {
     getClass.getResource("text.csv").getPath
   }
 
-  private def getWordCount(rdd: RDD[String]): Int = {
-    val count = rdd.map(_.split(",").length).sum()
-    count.toInt
-  }
 
-  private def getWordCountInBook(rdd: RDD[String]): Unit = {
-    val words = rdd.flatMap(l => l.split(","))
-    val counts = words.map(w => (w, 1)).reduceByKey{ case(x, y) => x + y }
-    val output = new File("./dev/count_result.csv")
-    counts.saveAsTextFile(output.getAbsolutePath)
-  }
 }
