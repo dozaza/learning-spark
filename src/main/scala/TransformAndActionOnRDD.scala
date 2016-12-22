@@ -1,6 +1,6 @@
 import org.apache.spark.rdd.RDD
 
-object TransferAndActionOnRDD {
+object TransformAndActionOnRDD {
 
   // All transformation on rdd will return a new rdd
 
