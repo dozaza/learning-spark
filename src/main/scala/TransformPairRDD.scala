@@ -1,6 +1,6 @@
 import org.apache.spark.rdd.RDD
 
-class TransformPairRDD {
+object TransformPairRDD {
 
   // group rdd with same key and apply function on each element
   def reduceByKey(rdd: RDD[(Int, Int)]): RDD[(Int, Int)] = {
@@ -9,15 +9,6 @@ class TransformPairRDD {
 
   def groupByKey(rdd: RDD[(Int, Int)]): RDD[(Int, List[(Int, Int)])] = {
     rdd.groupBy(_._1).mapValues(_.toList)
-  }
-
-  def combineByKey(rdd1: RDD[(Int, Int)], rdd2: RDD[(Int, Int)]): RDD[(Int, (Int, Int))] = {
-    // Calculate every key's sum & count of value
-    rdd1.combineByKey(
-      i => (i, 1),    // initial value
-      (t: (Int, Int), i) => (t._1 + i, t._2 + 1),   // apply on every element in partition
-      (t1: (Int, Int), t2: (Int, Int)) => (t1._1 + t2._2, t1._2 + t2._2)    // apply between partitions
-    )
   }
 
   def mapValue(rdd: RDD[(Int, Int)]): RDD[(Int, Int)] = {
