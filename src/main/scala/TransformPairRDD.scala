@@ -7,10 +7,6 @@ object TransformPairRDD {
     rdd.reduceByKey{case (i1, i2) => i1 + i2 }
   }
 
-  def groupByKey(rdd: RDD[(Int, Int)]): RDD[(Int, List[(Int, Int)])] = {
-    rdd.groupBy(_._1).mapValues(_.toList)
-  }
-
   def mapValue(rdd: RDD[(Int, Int)]): RDD[(Int, Int)] = {
     rdd.mapValues(_ + 1)
   }
@@ -35,11 +31,6 @@ object TransformPairRDD {
 
   def leftJoin(rdd1: RDD[(Int, Int)], rdd2: RDD[(Int, Int)]): RDD[(Int, (Int, Option[Int]))] = {
     rdd1.leftOuterJoin(rdd2)
-  }
-
-  def cogroup(rdd1: RDD[(Int, Int)], rdd2: RDD[(Int, Int)]): RDD[(Int, (Iterable[Int], Iterable[Int]))] = {
-    // like first rdd1.groupBy(_._1).join(rdd2.groupBy(_._1))nn
-    rdd1.cogroup(rdd2)
   }
 
   def filterByValue(rdd: RDD[(Int, Int)]): RDD[(Int, Int)] = {
