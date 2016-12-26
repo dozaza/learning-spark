@@ -1,5 +1,5 @@
 
-package PairRDD
+package pair_rdd
 
 import org.apache.spark.Partitioner
 import org.apache.spark.rdd.RDD
