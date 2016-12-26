@@ -1,3 +1,5 @@
+package PairRDD
+
 import org.apache.spark.rdd.RDD
 
 object JoinPairRDD {
