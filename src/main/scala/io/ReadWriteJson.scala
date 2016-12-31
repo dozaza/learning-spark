@@ -10,6 +10,7 @@ import org.apache.spark.rdd.RDD
 
 object ReadWriteJson {
 
+  //TODO compile error, maybe should use ClassTag
   def read[T](input: Seq[String], clazz: Class[T], sc: SparkContext): RDD[T] = {
     val mapper = new ObjectMapper()
     val seq = input.flatMap { record =>
