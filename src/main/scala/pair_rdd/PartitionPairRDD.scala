@@ -4,23 +4,25 @@ package pair_rdd
 import org.apache.spark.Partitioner
 import org.apache.spark.rdd.RDD
 
+import scala.reflect.ClassTag
+
 object PartitionPairRDD {
 
   // ex: partition = new HashPartitioner(100)
-  def partition[K, V](rdd: RDD[(K, V)], partitioner: Partitioner): RDD[(K, V)] = {
+  def partition[K: ClassTag, V: ClassTag](rdd: RDD[(K, V)], partitioner: Partitioner): RDD[(K, V)] = {
     // The reason to do partition on pair rdd is to avoid data shuffle
     // Pair rdd is partition by its' keys
     // Once partition finished and cached, we can do some job on keys without shuffling data, such as join.
     rdd.partitionBy(partitioner).persist()
   }
 
-  def join[K, V](partitioned: RDD[(K, V)], toJoin: RDD[(K, V)]): RDD[(K, (V, V))] = {
+  def join[K: ClassTag, V: ClassTag](partitioned: RDD[(K, V)], toJoin: RDD[(K, V)]): RDD[(K, (V, V))] = {
     // Only the pair rdd "toJoin" will be shuffled cause the pair "partitioned" is partitioned
     // Attention: if "partitioned" hasn't been persisted, each time using this pair will cause shuffle4
     partitioned.join(toJoin)
   }
 
-  def mapValue[K, V](partitioned: RDD[(K, V)]): RDD[(K, String)] = {
+  def mapValue[K: ClassTag, V: ClassTag](partitioned: RDD[(K, V)]): RDD[(K, String)] = {
     // mapValue will not destroy the partition info on a partitioned pair rdd, but map will
     // same thing on flatMapValue & flatMap
     partitioned.mapValues(v => v.toString)

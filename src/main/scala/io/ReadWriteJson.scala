@@ -8,10 +8,12 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 
+import scala.reflect.ClassTag
+
 object ReadWriteJson {
 
   //TODO compile error, maybe should use ClassTag
-  def read[T](input: Seq[String], clazz: Class[T], sc: SparkContext): RDD[T] = {
+  def read[T: ClassTag](input: Seq[String], clazz: Class[T], sc: SparkContext): RDD[T] = {
     val mapper = new ObjectMapper()
     val seq = input.flatMap { record =>
       try {
@@ -23,7 +25,7 @@ object ReadWriteJson {
     sc.parallelize(seq)
   }
 
-  def write[T](rdd: RDD[T], path: String): Unit = {
+  def write[T: ClassTag](rdd: RDD[T], path: String): Unit = {
     val mapper = new ObjectMapper()
     rdd.map(mapper.writeValueAsString).saveAsTextFile(path)
   }
