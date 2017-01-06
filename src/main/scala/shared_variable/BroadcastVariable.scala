@@ -4,7 +4,7 @@ package shared_variable
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 
-class BroadcastVariable {
+object BroadcastVariable {
 
   def broadcastVariable[T, V](rdd: RDD[T], toShare: V)(implicit sc: SparkContext): Unit = {
     // Usually to share a large data for every worker
