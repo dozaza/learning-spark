@@ -1,12 +1,15 @@
 package spark_sql
 
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.hive.HiveContext
 
 
 object SparkSql {
 
   // "sql" is Hive sql, similar to native sql, ex: SELECT name, age FROM users
   def getFromHive(sql: String): Unit = {
-    val hiveCtx = new HiveContext()
+    val builder = SparkSession.builder().enableHiveSupport()
+    val hiveCtx = new HiveContext(builder)
     // rows is a RDD
     val rows = hiveCtx.sql(sql)
     val firstRow = rows.first

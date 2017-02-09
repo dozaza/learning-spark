@@ -1,5 +1,5 @@
-# A Spark test project 
+# Spark Learning 
 
 --- 
 
-Only for spark test&learning.
+A project for spark test&learning.
