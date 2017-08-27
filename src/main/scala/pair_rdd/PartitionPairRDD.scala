@@ -28,12 +28,13 @@ object PartitionPairRDD {
     partitioned.mapValues(v => v.toString)
   }
 
+  // partitioned = rdd.partitionBy(partitionNum)
   def pageRank(partitioned: RDD[(String, Seq[String])]): RDD[(String, Double)] = {
     // We use mapValues so initRanks restore its parent's("partitioned") partition info.
-    val initRanks = partitioned.mapValues(v => 1.0)
+    val initRanks = partitioned.mapValues(_ => 1.0)
     (0 until 10).foldLeft(initRanks){ case(ranks, _) =>
       // Action join won't consume too much cause pair rdd is partitioned
-      val contributions = partitioned.join(ranks).flatMap { case(pageId, (links, rank)) =>
+      val contributions = partitioned.join(ranks).flatMap { case(_, (links, rank)) =>
         links.map(dest => (dest, rank / links.size))
       }
 

@@ -2,7 +2,7 @@ package pair_rdd
 
 import org.apache.spark.rdd.RDD
 
-object AggratePairRDD {
+object AggregatePairRDD {
 
   def meanByKey(rdd: RDD[(Int, Int)]): RDD[(Int, Double)] = {
     rdd.mapValues(v => (v, 1)).reduceByKey((t1, t2) => (t1._1 + t2._1, t1._2 + t2._2)).mapValues{case(sum, count) => sum / count.toDouble}
